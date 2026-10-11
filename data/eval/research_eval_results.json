@@ -1,0 +1,663 @@
+{
+  "started_at": "2026-10-01T01:23:03",
+  "cases": {
+    "us-01": {
+      "id": "us-01",
+      "category": "us_listed",
+      "company_name": "Apple Inc.",
+      "ticker": "AAPL",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "7381b9ff-adc9-4390-b02f-85a9ff9fd8cc",
+      "submitted_at": "2026-10-01T01:23:03",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "AAPL",
+      "financials_source": "sec_xbrl",
+      "report_chars": 5128,
+      "timings": {
+        "profile": 11.9,
+        "financials": 11.8,
+        "report": 30.0,
+        "total": 53.8,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-02": {
+      "id": "us-02",
+      "category": "us_listed",
+      "company_name": "Microsoft Corporation",
+      "ticker": "MSFT",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "5cc8a599-0291-47b5-80dd-34dd1f2ecb38",
+      "submitted_at": "2026-10-01T01:24:05",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "MSFT",
+      "financials_source": "sec_xbrl",
+      "report_chars": 5055,
+      "timings": {
+        "profile": 15.2,
+        "financials": 17.2,
+        "report": 25.9,
+        "total": 58.3,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-04": {
+      "id": "us-04",
+      "category": "us_listed",
+      "company_name": "NVIDIA Corporation",
+      "ticker": "NVDA",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "0b0fa056-cfe7-4ae0-b9ee-0d3c730382e8",
+      "submitted_at": "2026-10-01T01:25:08",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "NVDA",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4096,
+      "timings": {
+        "profile": 12.0,
+        "financials": 9.3,
+        "report": 26.3,
+        "total": 47.6,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "cn-01": {
+      "id": "cn-01",
+      "category": "chinese_name",
+      "company_name": "苹果",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "f408a62a-f0f6-4bf4-b4ca-8ca9e1eb9f0f",
+      "submitted_at": "2026-10-01T01:28:05",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "AAPL",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4187,
+      "timings": {
+        "profile": 17.4,
+        "financials": 12.6,
+        "report": 28.7,
+        "total": 58.7,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "cn-03": {
+      "id": "cn-03",
+      "category": "chinese_name",
+      "company_name": "腾讯",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "cc2adb46-4d6c-47fa-a3ba-169c1f9c0230",
+      "submitted_at": "2026-10-01T01:29:08",
+      "status": "completed",
+      "degraded_steps": [
+        "财报分析",
+        "报告撰写"
+      ],
+      "notes": [],
+      "profile_ticker": "TCEHY",
+      "financials_source": "none",
+      "report_chars": 3385,
+      "timings": {
+        "profile": 11.7,
+        "financials": 5.9,
+        "report": 21.8,
+        "total": 39.4,
+        "retry_count": 0,
+        "degraded_steps": [
+          "财报分析",
+          "报告撰写"
+        ]
+      }
+    },
+    "nd-01": {
+      "id": "nd-01",
+      "category": "no_data",
+      "company_name": "ZZZZ Corp",
+      "ticker": "ZZZZ",
+      "expect": "degraded",
+      "outcome": "ok",
+      "task_id": "5e9dce66-757d-40a8-9f6b-20b61d89d194",
+      "submitted_at": "2026-10-01T01:30:10",
+      "status": "completed",
+      "degraded_steps": [
+        "信息搜集",
+        "财报分析",
+        "报告撰写"
+      ],
+      "notes": [],
+      "profile_ticker": "ZZZZ",
+      "financials_source": "none",
+      "report_chars": 1926,
+      "timings": {
+        "profile": 6.2,
+        "financials": 10.6,
+        "report": 22.9,
+        "total": 39.7,
+        "retry_count": 0,
+        "degraded_steps": [
+          "信息搜集",
+          "财报分析",
+          "报告撰写"
+        ]
+      }
+    },
+    "nd-02": {
+      "id": "nd-02",
+      "category": "no_data",
+      "company_name": "Foobar Inc.",
+      "ticker": "FOOBAR",
+      "expect": "degraded",
+      "outcome": "ok",
+      "task_id": "4d3823a1-9cdd-45d4-8949-38cb97a8f1b5",
+      "submitted_at": "2026-10-01T01:31:12",
+      "status": "completed",
+      "degraded_steps": [
+        "信息搜集",
+        "财报分析",
+        "报告撰写"
+      ],
+      "notes": [],
+      "profile_ticker": "FOOBAR",
+      "financials_source": "none",
+      "report_chars": 1982,
+      "timings": {
+        "profile": 8.8,
+        "financials": 0.0,
+        "report": 29.4,
+        "total": 38.2,
+        "retry_count": 0,
+        "degraded_steps": [
+          "信息搜集",
+          "财报分析",
+          "报告撰写"
+        ]
+      }
+    },
+    "eg-05": {
+      "id": "eg-05",
+      "category": "edge_case",
+      "company_name": "Apple Inc. (formerly Apple Computer, Inc.) - Cupertino, California, USA",
+      "ticker": "AAPL",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "1216cd66-6328-4e02-8d22-6b01b4a3f2b0",
+      "submitted_at": "2026-10-01T01:41:47",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "AAPL",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4897,
+      "timings": {
+        "profile": 11.6,
+        "financials": 15.2,
+        "report": 25.3,
+        "total": 52.1,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "eg-01": {
+      "id": "eg-01",
+      "category": "edge_case",
+      "company_name": "AT&T Inc.",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "eb19ca8f-a5ad-4e9e-8a36-ac5ddc039d80",
+      "submitted_at": "2026-10-01T01:43:18",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "T",
+      "financials_source": "sec_xbrl",
+      "report_chars": 3739,
+      "timings": {
+        "profile": 38.7,
+        "financials": 20.0,
+        "report": 16.0,
+        "total": 74.8,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "eg-03": {
+      "id": "eg-03",
+      "category": "edge_case",
+      "company_name": "O'Reilly Automotive, Inc.",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "ea03038e-2518-4c03-8c30-9bbcb5cbf643",
+      "submitted_at": "2026-10-01T01:44:24",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "ORLY",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4316,
+      "timings": {
+        "profile": 17.6,
+        "financials": 17.0,
+        "report": 35.6,
+        "total": 70.1,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-03": {
+      "id": "us-03",
+      "category": "us_listed",
+      "company_name": "Tesla, Inc.",
+      "ticker": "TSLA",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "eb9f73db-71be-4789-8252-083d8497913e",
+      "submitted_at": "2026-10-01T01:45:35",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "TSLA",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4585,
+      "timings": {
+        "profile": 18.1,
+        "financials": 8.9,
+        "report": 57.4,
+        "total": 84.4,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-05": {
+      "id": "us-05",
+      "category": "us_listed",
+      "company_name": "Amazon.com, Inc.",
+      "ticker": "AMZN",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "a5ed219c-7b96-452a-a8af-e54cbb39fa11",
+      "submitted_at": "2026-10-01T01:46:41",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "AMZN",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4257,
+      "timings": {
+        "profile": 26.6,
+        "financials": 10.8,
+        "report": 40.4,
+        "total": 77.9,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-06": {
+      "id": "us-06",
+      "category": "us_listed",
+      "company_name": "Alphabet Inc.",
+      "ticker": "GOOGL",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "bf6db4f9-c4a9-4084-8ea3-b7db16ef78b7",
+      "submitted_at": "2026-10-01T01:47:46",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "GOOGL",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4786,
+      "timings": {
+        "profile": 13.7,
+        "financials": 13.1,
+        "report": 22.8,
+        "total": 49.7,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-07": {
+      "id": "us-07",
+      "category": "us_listed",
+      "company_name": "Meta Platforms, Inc.",
+      "ticker": "META",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "1e51b28d-68a4-4902-a3c8-6a130ec692f1",
+      "submitted_at": "2026-10-01T01:48:48",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "META",
+      "financials_source": "sec_xbrl",
+      "report_chars": 5058,
+      "timings": {
+        "profile": 16.4,
+        "financials": 9.1,
+        "report": 48.4,
+        "total": 73.9,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-08": {
+      "id": "us-08",
+      "category": "us_listed",
+      "company_name": "Netflix, Inc.",
+      "ticker": "NFLX",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "7c4c4daa-e4dc-401c-b8d5-1f21acbcb5e1",
+      "submitted_at": "2026-10-01T01:49:54",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "NFLX",
+      "financials_source": "sec_xbrl",
+      "report_chars": 3888,
+      "timings": {
+        "profile": 43.0,
+        "financials": 13.3,
+        "report": 47.6,
+        "total": 103.9,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-09": {
+      "id": "us-09",
+      "category": "us_listed",
+      "company_name": "JPMorgan Chase & Co.",
+      "ticker": "JPM",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "c42e43f6-f1dc-42f3-a9dc-d12b04d4ec91",
+      "submitted_at": "2026-10-01T01:50:59",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "JPM",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4210,
+      "timings": {
+        "profile": 7.2,
+        "financials": 7.4,
+        "report": 50.5,
+        "total": 65.1,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "cn-02": {
+      "id": "cn-02",
+      "category": "chinese_name",
+      "company_name": "微软",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "ed6c9485-17b5-4bd6-b2a1-7fa4ec97f023",
+      "submitted_at": "2026-10-01T01:53:10",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "MSFT",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4824,
+      "timings": {
+        "profile": 8.9,
+        "financials": 9.2,
+        "report": 45.1,
+        "total": 63.3,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "cn-05": {
+      "id": "cn-05",
+      "category": "chinese_name",
+      "company_name": "特斯拉",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "736d77a0-3131-4b22-84b5-1dbc56f9ed78",
+      "submitted_at": "2026-10-01T01:55:17",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "TSLA",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4041,
+      "timings": {
+        "profile": 21.2,
+        "financials": 10.4,
+        "report": 55.8,
+        "total": 87.5,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "nd-03": {
+      "id": "nd-03",
+      "category": "no_data",
+      "company_name": "Nonexistent Holdings Limited",
+      "ticker": "NONEXX",
+      "expect": "degraded",
+      "outcome": "ok",
+      "task_id": "04f0e18d-4f1a-4169-bf23-1afe68735c7b",
+      "submitted_at": "2026-10-01T01:56:23",
+      "status": "completed",
+      "degraded_steps": [
+        "信息搜集",
+        "财报分析",
+        "报告撰写"
+      ],
+      "notes": [
+        "信息搜集降级：检索未找到「Nonexistent Holdings Limited」的相关信息（LLM 判定为未知公司）",
+        "财报分析降级：yfinance 不可用：TickerNoData: yfinance 未返回任何报表数据：NONEXX；SEC XBRL 不可用：TickerNoData: SEC 映射表中没有该 ticker：NONEXX（可能非美股上市公司）；检索片段兜底也未获得可信数字（无引用证据）",
+        "报告撰写降级"
+      ],
+      "profile_ticker": "NONEXX",
+      "financials_source": "none",
+      "report_chars": 2219,
+      "timings": {
+        "profile": 5.9,
+        "financials": 11.6,
+        "report": 17.7,
+        "total": 35.3,
+        "retry_count": 0,
+        "degraded_steps": [
+          "信息搜集",
+          "财报分析",
+          "报告撰写"
+        ]
+      }
+    },
+    "nd-04": {
+      "id": "nd-04",
+      "category": "no_data",
+      "company_name": "不存在的公司XYZ",
+      "ticker": "XYZNONE",
+      "expect": "degraded",
+      "outcome": "ok",
+      "task_id": "1fd68699-4a24-414f-b218-b262bf1cc7f3",
+      "submitted_at": "2026-10-01T01:57:26",
+      "status": "completed",
+      "degraded_steps": [
+        "信息搜集",
+        "财报分析",
+        "报告撰写"
+      ],
+      "notes": [
+        "信息搜集降级：检索未找到「不存在的公司XYZ」的相关信息（LLM 判定为未知公司）",
+        "财报分析降级：yfinance 不可用：YahooUnavailable: Yahoo 处于冷却期（此前连续失败）；SEC XBRL 不可用：TickerNoData: SEC 映射表中没有该 ticker：XYZNONE（可能非美股上市公司）；检索片段兜底也未获得可信数字（无引用证据）",
+        "报告撰写降级"
+      ],
+      "profile_ticker": "XYZNONE",
+      "financials_source": "none",
+      "report_chars": 2509,
+      "timings": {
+        "profile": 8.2,
+        "financials": 4.2,
+        "report": 14.6,
+        "total": 27.0,
+        "retry_count": 0,
+        "degraded_steps": [
+          "信息搜集",
+          "财报分析",
+          "报告撰写"
+        ]
+      }
+    },
+    "nd-05": {
+      "id": "nd-05",
+      "category": "no_data",
+      "company_name": "Qwertyuiop Industries",
+      "ticker": "QWERTY",
+      "expect": "degraded",
+      "outcome": "ok",
+      "task_id": "64fa96c1-2f9f-4c1d-82b9-be9d5cf73fd1",
+      "submitted_at": "2026-10-01T01:58:28",
+      "status": "completed",
+      "degraded_steps": [
+        "信息搜集",
+        "财报分析",
+        "报告撰写"
+      ],
+      "notes": [
+        "信息搜集降级：检索未找到「Qwertyuiop Industries」的相关信息（LLM 判定为未知公司）",
+        "财报分析降级：yfinance 不可用：YahooUnavailable: Yahoo 处于冷却期（此前连续失败）；SEC XBRL 不可用：TickerNoData: SEC 映射表中没有该 ticker：QWERTY（可能非美股上市公司）；检索片段兜底也未获得可信数字（无引用证据）",
+        "报告撰写降级"
+      ],
+      "profile_ticker": "QWERTY",
+      "financials_source": "none",
+      "report_chars": 1995,
+      "timings": {
+        "profile": 7.4,
+        "financials": 5.2,
+        "report": 26.4,
+        "total": 39.0,
+        "retry_count": 0,
+        "degraded_steps": [
+          "信息搜集",
+          "财报分析",
+          "报告撰写"
+        ]
+      }
+    },
+    "eg-02": {
+      "id": "eg-02",
+      "category": "edge_case",
+      "company_name": "Johnson & Johnson",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "ce50010b-02fc-4b3c-bacc-9145699ebad1",
+      "submitted_at": "2026-10-01T01:59:30",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "JNJ",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4148,
+      "timings": {
+        "profile": 17.9,
+        "financials": 9.0,
+        "report": 57.7,
+        "total": 84.6,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "eg-04": {
+      "id": "eg-04",
+      "category": "edge_case",
+      "company_name": "3M Company",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "92b38832-b8a8-4f00-ae19-432c50ea8da6",
+      "submitted_at": "2026-10-01T02:00:37",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "MMM",
+      "financials_source": "sec_xbrl",
+      "report_chars": 5771,
+      "timings": {
+        "profile": 16.5,
+        "financials": 14.8,
+        "report": 29.1,
+        "total": 60.4,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "us-10": {
+      "id": "us-10",
+      "category": "us_listed",
+      "company_name": "The Coca-Cola Company",
+      "ticker": "KO",
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "fc2fba03-2b78-4f34-be18-2a2e82ba4078",
+      "submitted_at": "2026-10-01T02:05:16",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "KO",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4334,
+      "timings": {
+        "profile": 41.2,
+        "financials": 19.8,
+        "report": 38.5,
+        "total": 99.5,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    },
+    "cn-04": {
+      "id": "cn-04",
+      "category": "chinese_name",
+      "company_name": "阿里巴巴",
+      "ticker": null,
+      "expect": "success",
+      "outcome": "ok",
+      "task_id": "1cb09898-f2ef-4131-a64b-cdb0d9bd32dc",
+      "submitted_at": "2026-10-01T02:06:21",
+      "status": "completed",
+      "degraded_steps": [],
+      "notes": [],
+      "profile_ticker": "BABA",
+      "financials_source": "sec_xbrl",
+      "report_chars": 4503,
+      "timings": {
+        "profile": 14.4,
+        "financials": 11.3,
+        "report": 27.0,
+        "total": 52.7,
+        "retry_count": 0,
+        "degraded_steps": []
+      }
+    }
+  }
+}

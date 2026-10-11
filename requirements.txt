@@ -1,0 +1,57 @@
+# Agent 驱动的自动化投研系统 —— 核心依赖
+#
+# 安装（国内网络务必走镜像源，官方源会长时间无连接卡住）：
+#   .venv\Scripts\python.exe -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+#
+# 说明：MinerU（magic-pdf）体积大且带 OCR/模型权重，按需单独安装：
+#   .venv\Scripts\python.exe -m pip install "mineru[core]" -i <镜像源>
+# 未安装时自动走 PyPDF2/pypdf + pdfplumber 降级解析（需求 3.9）。
+
+# ---- Web 框架与配置 ----
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic-settings>=2.4
+python-dotenv>=1.0
+
+# ---- 结构化日志（需求 N4）----
+loguru>=0.7
+
+# ---- 异步任务队列（需求 3.1 / 3.2：Celery + Redis）----
+celery>=5.4
+redis>=5.0
+
+# ---- 数据库（需求 3.8：PostgreSQL 存任务/中间产出/报告）----
+asyncpg>=0.29
+
+# ---- HTTP 客户端（SEC EDGAR / Yahoo Finance / Webhook）----
+httpx>=0.27
+
+# ---- 可观测性指标（需求 N4）----
+prometheus-client>=0.20
+
+# ---- 多 Agent 编排（需求 3.2 / 3.4）----
+crewai>=0.86
+langchain>=0.3
+langchain-openai>=0.2
+
+# ---- 重试与降级（需求 3.6：tenacity 指数退避）----
+tenacity>=9.0
+
+# ---- 联网检索（阶段 A：信息搜集 Agent，均免 API Key）----
+ddgs>=9                    # DuckDuckGo 搜索的新包名（代码优先使用，无弃用告警）
+duckduckgo-search>=8.1     # 需求文档中写的旧包名，保留兼容（代码对两者都支持）
+wikipedia>=1.4             # Wikipedia 摘要
+beautifulsoup4>=4.12       # Bing 网页解析（DDG/Wikipedia 不可达时的降级搜索源，需求 3.9）
+lxml>=5.0                  # bs4 解析器
+
+# ---- 财务数据（阶段 B：财务分析 Agent）----
+yfinance>=1.7              # Yahoo Finance 三大报表 + 报价（同时装 pandas）
+# 注：SEC EDGAR XBRL 结构化接口用 httpx 直连，无需额外依赖；
+#     Yahoo 被限流时报价自动降级到新浪/腾讯行情（见 app/tools/yahoo_finance.py）
+
+# ---- PDF 解析降级方案（需求 3.9：MinerU 失败时）----
+pypdf>=5.0
+pdfplumber>=0.11
+
+# ---- 开发/测试 ----
+pytest>=8.0                # 关键路径单测（tests/）：见 README「质量保障」

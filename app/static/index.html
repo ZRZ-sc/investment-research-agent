@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自动化投研系统 · Agent 驱动的投资分析报告</title>
+<style>
+  :root{--bg:#f5f6f8;--card:#fff;--line:#e5e7eb;--text:#1f2328;--muted:#6b7280;
+        --brand:#2563eb;--brand-soft:#eff6ff;--ok:#059669;--warn:#d97706;--err:#dc2626}
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--text)}
+  header{background:var(--card);border-bottom:1px solid var(--line);padding:10px 16px;
+         display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+  header h1{font-size:16px;margin:0;font-weight:600}
+  .spacer{flex:1}
+  .meta{font-size:12px;color:var(--muted)}
+  input,button{font:inherit}
+  input[type=text]{padding:8px 10px;border:1px solid var(--line);border-radius:8px;outline:none}
+  input[type=text]:focus{border-color:var(--brand)}
+  .token-input{width:190px;font-size:12px;padding:6px 8px}
+  button{cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:8px;
+         padding:7px 13px;transition:.15s}
+  button:hover{border-color:var(--brand);color:var(--brand)}
+  button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  button.primary:hover{opacity:.9;color:#fff}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  a{text-decoration:none}
+  main{max-width:960px;margin:0 auto;padding:18px 16px 60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  .card h2{font-size:15px;margin:0 0 12px;font-weight:600}
+  .form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .form-row label{font-size:13px;color:var(--muted)}
+  #company{width:260px}
+  #ticker{width:130px}
+  .examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+  .examples button{font-size:12px;padding:4px 10px;color:var(--muted)}
+  .hint{font-size:12px;color:var(--muted);margin:12px 0 0}
+  .hidden{display:none}
+  .kv{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:13px;margin-bottom:10px}
+  code{background:#f3f4f6;border-radius:4px;padding:1px 6px;font-size:12px}
+  .bar{height:10px;background:#eef1f5;border-radius:999px;overflow:hidden;margin:6px 0 14px}
+  .fill{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#2563eb);transition:width .5s}
+  .steps{display:flex;flex-direction:column;gap:8px}
+  .step{display:flex;align-items:center;gap:10px;font-size:13px;
+        border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+  .step .icon{width:18px;text-align:center}
+  .step.done{border-color:#a7f3d0;background:#ecfdf5}
+  .step.running{border-color:#bfdbfe;background:var(--brand-soft)}
+  .step.degraded{border-color:#fde68a;background:#fffbeb}
+  .step .detail{margin-left:auto;color:var(--muted);font-size:12px;text-align:right}
+  .warn{border:1px solid #fde68a;background:#fffbeb;color:#92400e;border-radius:10px;
+        padding:10px 12px;font-size:13px;margin-top:12px;white-space:pre-wrap}
+  .err{border:1px solid #fecaca;background:#fef2f2;color:var(--err);border-radius:10px;
+       padding:10px 12px;font-size:13px;margin-top:12px;white-space:pre-wrap}
+  .badge{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);
+         background:#f3f4f6;color:var(--muted)}
+  .badge.ok{background:#ecfdf5;color:var(--ok);border-color:#a7f3d0}
+  .badge.run{background:var(--brand-soft);color:var(--brand);border-color:#bfdbfe}
+  .badge.warn{background:#fffbeb;color:var(--warn);border-color:#fde68a}
+  .badge.err{background:#fef2f2;color:var(--err);border-color:#fecaca}
+  article.md{font-size:14px}
+  article.md h1{font-size:20px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  article.md h2{font-size:16px;margin-top:22px}
+  article.md h3{font-size:14px}
+  article.md table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13px}
+  article.md th,article.md td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+  article.md th{background:#f8fafc}
+  article.md blockquote{margin:10px 0;padding:8px 14px;background:#fffbeb;
+                        border-left:3px solid var(--warn);color:#92400e}
+  article.md code{background:#f3f4f6}
+  article.md pre{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto}
+  pre.raw{white-space:pre-wrap;word-break:break-word;background:#f8fafc;border:1px solid var(--line);
+          border-radius:8px;padding:12px;font-size:12px;max-height:520px;overflow:auto}
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 自动化投研系统</h1>
+  <span class="meta">Agent 驱动：信息搜集 → 财报分析 → 报告撰写</span>
+  <span class="spacer"></span>
+  <input class="token-input" id="token" placeholder="API Token" title="请求头 Authorization: Bearer <token>">
+  <a href="/docs" target="_blank"><button>API 文档</button></a>
+  <a href="/health" target="_blank"><button>健康检查</button></a>
+</header>
+
+<main>
+  <section class="card" id="formCard">
+    <h2>生成投资分析报告</h2>
+    <div class="form-row">
+      <label for="company">公司名称</label>
+      <input type="text" id="company" placeholder="如 Apple Inc." value="">
+      <label for="ticker">Ticker（可选）</label>
+      <input type="text" id="ticker" placeholder="如 AAPL" value="">
+      <button class="primary" id="submitBtn">生成报告</button>
+    </div>
+    <div class="examples">
+      <span class="meta">示例：</span>
+      <button data-c="Apple Inc." data-t="AAPL">Apple Inc.</button>
+      <button data-c="Microsoft Corporation" data-t="MSFT">Microsoft</button>
+      <button data-c="Tesla, Inc." data-t="TSLA">Tesla</button>
+      <button data-c="NVIDIA Corporation" data-t="NVDA">NVIDIA</button>
+      <button data-c="ZZZZ Corp" data-t="ZZZZ">无数据公司（降级演示）</button>
+    </div>
+    <p class="hint">限流：每个 token 每分钟最多 1 个新任务（超限返回 429，请等 60 秒）；单任务约 1–3 分钟，
+      期间可关闭页面，稍后用 <code>/?task=&lt;task_id&gt;</code> 回看报告。</p>
+    <!-- 提交阶段的错误（401/429/参数）必须放在始终可见的卡片里 -->
+    <div class="err hidden" id="errorBox"></div>
+  </section>
+
+  <section class="card hidden" id="statusCard">
+    <h2>任务进度</h2>
+    <div class="kv">
+      <span><span class="meta">任务 ID</span> <code id="taskId">-</code></span>
+      <button id="copyBtn" style="font-size:12px;padding:3px 8px">复制</button>
+      <span><span class="meta">状态</span> <span id="statusBadge" class="badge">-</span></span>
+      <span><span class="meta">当前步骤</span> <span id="currentStep">-</span></span>
+      <span><span class="meta">已用时</span> <span id="elapsed">0s</span></span>
+    </div>
+    <div class="bar"><div class="fill" id="barFill"></div></div>
+    <div class="steps" id="steps"></div>
+    <div class="warn hidden" id="degradedBox"></div>
+  </section>
+
+  <section class="card hidden" id="reportCard">
+    <h2>投资分析报告</h2>
+    <div class="kv">
+      <span class="meta" id="reportMeta"></span>
+      <span class="spacer"></span>
+      <button id="rawBtn" style="font-size:12px;padding:4px 10px">查看 Markdown 原文</button>
+      <a id="dlLink" download="report.md"><button style="font-size:12px;padding:4px 10px">下载 .md</button></a>
+    </div>
+    <article class="md" id="report"></article>
+    <pre class="raw hidden" id="rawMd"></pre>
+  </section>
+</main>
+
+<script src="/static/vendor/marked.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  const DEFAULT_TOKEN = "dev-token-change-me";
+  const STEPS = [
+    { key: "company_profile", label: "① 信息搜集", agent: "InformationSpecialist" },
+    { key: "financial_metrics", label: "② 财报分析", agent: "FinancialAnalyst" },
+    { key: "investment_report", label: "③ 报告撰写", agent: "ReportWriter" }
+  ];
+  const el = (id) => document.getElementById(id);
+  let timer = null, pollTimer = null, startedAt = 0, currentTask = null, rawMarkdown = "";
+
+  // ---- Token：默认填 .env 的默认值，用户可改，存 localStorage ----
+  const tokenInput = el("token");
+  tokenInput.value = localStorage.getItem("research_token") || DEFAULT_TOKEN;
+  tokenInput.addEventListener("change", () => localStorage.setItem("research_token", tokenInput.value.trim()));
+  const token = () => (tokenInput.value || DEFAULT_TOKEN).trim();
+
+  // ---- marked 兜底：本地文件缺失时用 CDN ----
+  if (typeof window.marked === "undefined") {
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+    document.head.appendChild(s);
+  }
+
+  function escapeHtml(text) {
+    // 报告含检索来的外部文本（新闻标题等），先转义再交给 marked，杜绝 HTML 注入
+    return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  const num = (v, d = 2) => (typeof v === "number" ? v.toLocaleString("en-US", { maximumFractionDigits: d }) : "—");
+
+  async function api(path, options) {
+    const opts = options || {};
+    opts.headers = Object.assign({ "Authorization": "Bearer " + token() }, opts.headers || {});
+    const resp = await fetch(path, opts);
+    let body = null;
+    try { body = await resp.json(); } catch (e) { /* 非 JSON */ }
+    return { status: resp.status, ok: resp.ok, body: body, retryAfter: resp.headers.get("Retry-After") };
+  }
+
+  function showError(message) {
+    const box = el("errorBox");
+    box.textContent = message;
+    box.classList.remove("hidden");
+  }
+  function clearError() { el("errorBox").classList.add("hidden"); }
+
+  function setStatusBadge(status) {
+    const map = {
+      queued: ["排队中", "badge run"], running: ["执行中", "badge run"],
+      completed: ["已完成", "badge ok"], failed: ["失败", "badge err"],
+      pending: ["待处理", "badge"]
+    };
+    const item = map[status] || [status || "-", "badge"];
+    const node = el("statusBadge");
+    node.textContent = item[0];
+    node.className = item[1];
+  }
+
+  function describeStep(key, payload) {
+    if (!payload) return "";
+    if (key === "company_profile") {
+      const bits = [];
+      if (payload.ticker) bits.push("ticker=" + payload.ticker);
+      if (payload.sector) bits.push(payload.sector);
+      if (Array.isArray(payload.products) && payload.products.length) bits.push(payload.products.length + " 个产品");
+      if (Array.isArray(payload.recent_news) && payload.recent_news.length) bits.push(payload.recent_news.length + " 条新闻");
+      return bits.join(" · ");
+    }
+    if (key === "financial_metrics") {
+      const m = payload.key_metrics || {};
+      const bits = [];
+      if (payload.data_source) bits.push("数据源=" + payload.data_source);
+      if (payload.quote_source) bits.push("报价=" + payload.quote_source);
+      if (m.pe_ratio != null) bits.push("PE=" + num(m.pe_ratio));
+      if (payload.stock_price != null) bits.push("股价=" + num(payload.stock_price));
+      if (Array.isArray(payload.fiscal_years) && payload.fiscal_years.length) bits.push("财年=" + payload.fiscal_years.join("/"));
+      return bits.join(" · ");
+    }
+    if (key === "investment_report") {
+      const bits = [];
+      if (payload.model) bits.push(payload.model);
+      if (payload.char_count) bits.push(num(payload.char_count, 0) + " 字");
+      if (payload.llm_ok === false) bits.push("正文降级");
+      return bits.join(" · ");
+    }
+    return "";
+  }
+
+  function renderSteps(intermediate, status, currentStep) {
+    const box = el("steps");
+    box.innerHTML = "";
+    // 第一个尚未完成的步骤才是「进行中」，其余未完成步骤显示「等待中」
+    const firstPending = STEPS.findIndex(function (s) { return !(intermediate && intermediate[s.key] != null); });
+    STEPS.forEach(function (step, idx) {
+      const payload = intermediate ? intermediate[step.key] : null;
+      const done = payload != null;
+      const degraded = done && payload.degraded === true;
+      const isRunning = !done && status === "running" && idx === firstPending;
+      let cls = "step";
+      let icon = "○";
+      if (done) { cls += degraded ? " degraded" : " done"; icon = degraded ? "⚠️" : "✅"; }
+      else if (isRunning) { cls += " running"; icon = "⏳"; }
+
+      const div = document.createElement("div");
+      div.className = cls;
+      const left = document.createElement("span");
+      left.className = "icon";
+      left.textContent = icon;
+      const label = document.createElement("span");
+      label.innerHTML = "<b>" + step.label + "</b> <span class='meta'>" + step.agent + "</span>";
+      const detail = document.createElement("span");
+      detail.className = "detail";
+      if (done) detail.textContent = describeStep(step.key, payload);
+      else if (isRunning) detail.textContent = currentStep || "执行中";
+      else detail.textContent = status === "running" ? "等待中" : "";
+      div.appendChild(left); div.appendChild(label); div.appendChild(detail);
+      if (degraded) {
+        const badge = document.createElement("span");
+        badge.className = "badge warn";
+        badge.textContent = "数据受限";
+        div.appendChild(badge);
+      }
+      box.appendChild(div);
+    });
+  }
+
+  function renderDegraded(data) {
+    const box = el("degradedBox");
+    const flags = [];
+    const intermediate = data.intermediate_outputs || {};
+    STEPS.forEach(function (step) {
+      const payload = intermediate[step.key];
+      if (payload && payload.degraded) flags.push(step.label + "：" + (payload.error || "degraded=true"));
+    });
+    if (data.error_message) flags.push("任务级错误：" + data.error_message);
+    if (flags.length) { box.textContent = "⚠️ 数据来源受限\n" + flags.join("\n"); box.classList.remove("hidden"); }
+    else { box.classList.add("hidden"); }
+  }
+
+  function tickElapsed() {
+    if (!startedAt) return;
+    const sec = Math.round((Date.now() - startedAt) / 1000);
+    el("elapsed").textContent = sec < 60 ? sec + "s" : Math.floor(sec / 60) + "m" + (sec % 60) + "s";
+  }
+
+  function startPolling(taskId) {
+    currentTask = taskId;
+    el("statusCard").classList.remove("hidden");
+    el("taskId").textContent = taskId;
+    if (!startedAt) { startedAt = Date.now(); timer = setInterval(tickElapsed, 1000); }
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(() => pollOnce(taskId), 2500);
+    pollOnce(taskId);
+  }
+
+  async function pollOnce(taskId) {
+    const res = await api("/api/v1/research/" + taskId);
+    if (res.status === 401) { showError("鉴权失败：请在右上角填写正确的 API Token（.env 的 API_TOKEN）。"); return; }
+    if (!res.ok || !res.body) { showError("查询任务状态失败：HTTP " + res.status); return; }
+    const data = res.body.data || {};
+    const progress = typeof data.progress === "number" ? data.progress : 0;
+    el("barFill").style.width = Math.round(progress * 100) + "%";
+    setStatusBadge(data.status);
+    el("currentStep").textContent = data.current_step || "-";
+    renderSteps(data.intermediate_outputs, data.status, data.current_step);
+    renderDegraded(data);
+
+    if (data.status === "completed") {
+      clearInterval(pollTimer); pollTimer = null;
+      if (timer) { clearInterval(timer); timer = null; }
+      tickElapsed();
+      await loadReport(taskId);
+    } else if (data.status === "failed") {
+      clearInterval(pollTimer); pollTimer = null;
+      if (timer) { clearInterval(timer); timer = null; }
+      showError("任务失败：" + (data.error_message || "未知错误"));
+    }
+  }
+
+  async function loadReport(taskId) {
+    const res = await api("/api/v1/research/" + taskId + "/report");
+    if (!res.ok || !res.body) { showError("报告获取失败：HTTP " + res.status); return; }
+    const data = res.body.data || {};
+    rawMarkdown = data.report_content || "";
+    el("reportMeta").textContent = [
+      "格式：" + (data.report_format || "markdown"),
+      data.generated_at ? "生成于 " + data.generated_at.replace("T", " ") : "",
+      rawMarkdown.length ? rawMarkdown.length.toLocaleString() + " 字符" : ""
+    ].filter(Boolean).join(" ｜ ");
+    el("reportCard").classList.remove("hidden");
+    renderMarkdown(rawMarkdown);
+    const blob = new Blob([rawMarkdown], { type: "text/markdown;charset=utf-8" });
+    el("dlLink").href = URL.createObjectURL(blob);
+    el("dlLink").download = (taskId || "report") + ".md";
+    el("reportCard").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderMarkdown(md) {
+    if (window.marked && typeof window.marked.parse === "function") {
+      el("report").innerHTML = window.marked.parse(escapeHtml(md));
+    } else {
+      // marked 未加载（离线且本地文件缺失）时退化为纯文本展示
+      el("report").innerHTML = "<pre class='raw'>" + escapeHtml(md) + "</pre>";
+    }
+    el("rawMd").textContent = md;
+  }
+
+  async function submitTask() {
+    const company = el("company").value.trim();
+    const ticker = el("ticker").value.trim();
+    if (!company) { showError("请输入公司名称。"); return; }
+    clearError();
+    el("submitBtn").disabled = true;
+    el("submitBtn").textContent = "提交中…";
+    el("reportCard").classList.add("hidden");
+    startedAt = Date.now();
+    try {
+      const payload = { company_name: company };
+      if (ticker) payload.ticker = ticker;
+      const res = await api("/api/v1/research", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.status === 401) { showError("鉴权失败：请在右上角填写正确的 API Token（.env 的 API_TOKEN）。"); return; }
+      if (res.status === 429) {
+        showError("触发限流：每个 token 每分钟最多 1 个新任务，请 " + (res.retryAfter || 60) + " 秒后重试。");
+        return;
+      }
+      if (!res.ok || !res.body) {
+        showError("创建任务失败：HTTP " + res.status + (res.body && res.body.message ? " · " + res.body.message : ""));
+        return;
+      }
+      const data = res.body.data || {};
+      el("barFill").style.width = "2%";
+      startPolling(data.task_id);
+    } catch (err) {
+      showError("请求异常：" + err);
+    } finally {
+      el("submitBtn").disabled = false;
+      el("submitBtn").textContent = "生成报告";
+    }
+  }
+
+  // ---- 事件绑定 ----
+  el("submitBtn").addEventListener("click", submitTask);
+  el("company").addEventListener("keydown", (e) => { if (e.key === "Enter") submitTask(); });
+  el("ticker").addEventListener("keydown", (e) => { if (e.key === "Enter") submitTask(); });
+  el("copyBtn").addEventListener("click", function () {
+    if (!currentTask) return;
+    navigator.clipboard && navigator.clipboard.writeText(currentTask);
+    el("copyBtn").textContent = "已复制";
+    setTimeout(() => (el("copyBtn").textContent = "复制"), 1500);
+  });
+  el("rawBtn").addEventListener("click", function () {
+    const raw = el("rawMd");
+    const hidden = raw.classList.toggle("hidden");
+    el("rawBtn").textContent = hidden ? "查看 Markdown 原文" : "隐藏 Markdown 原文";
+  });
+  document.querySelectorAll(".examples button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      el("company").value = btn.dataset.c || "";
+      el("ticker").value = btn.dataset.t || "";
+      el("company").focus();
+    });
+  });
+
+  // ---- 深链：?company=&ticker=&auto=1（自动提交演示）｜?task=<id>（回看历史报告）----
+  const params = new URLSearchParams(location.search);
+  if (params.get("company")) el("company").value = params.get("company");
+  if (params.get("ticker")) el("ticker").value = params.get("ticker");
+  if (params.get("task")) startPolling(params.get("task"));
+  else if (params.get("auto") === "1" && el("company").value) submitTask();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+# 统一换行符策略：避免 Windows(core.autocrlf=true) 把容器/配置类文件签出成 CRLF
+* text=auto
+
+# 容器与 Nginx 配置必须保持 LF：CRLF 会污染 nginx 指令、Dockerfile 续行与 shell 脚本
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+*.conf text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+
+# PowerShell 脚本保持 CRLF（Windows PowerShell 5.1 对 LF+中文的处理更脆弱）
+*.ps1 text eol=crlf
+
+# 二进制/模型文件不做换行转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.bin binary
+*.safetensors binary
+*.onnx binary

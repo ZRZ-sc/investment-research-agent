@@ -1,0 +1,71 @@
+# =============================================================================
+# Agent 驱动的自动化投研系统 —— 基础设施编排（PostgreSQL + Redis）
+#
+# 服务构成（需求 3.2 技术栈 / 3.8 数据模型）：
+#   - PostgreSQL：任务状态 research_tasks、中间产出 task_outputs、最终报告 research_reports
+#   - Redis：Celery 的 broker(db1) 与 result backend(db2)、财报/搜索缓存、限流令牌桶
+#
+# 与上一版（RAG 智能客服）的差异：
+#   本项目是「文本 + 多 Agent 工作流」，没有向量检索环节，故移除 Milvus，
+#   其依赖的 etcd、minio 一并删除；仅保留 PostgreSQL + Redis 两个基础设施服务。
+#
+# 用法（本机 Docker 引擎运行在 WSL Ubuntu 内，见 scripts/infra_up.ps1）：
+#   docker compose --env-file .env --env-file .env.local -f docker-compose.infra.yml up -d
+#   docker compose --env-file .env --env-file .env.local -f docker-compose.infra.yml ps
+#   docker compose --env-file .env --env-file .env.local -f docker-compose.infra.yml down   # 加 -v 连数据卷
+#
+# 端口说明：宿主端口由 PG_PORT / REDIS_PORT 决定（**故意不给默认值**，必须传 env-file），
+#   本机取值 5433 / 6380，避开项目一长期占用的 5432 / 6379；容器内端口保持 5432 / 6379 不变。
+#   注意：PG_PORT / REDIS_PORT 故意不带默认值，必须由 env 文件提供（本机 .env 与 .env.local
+#   都写了 5433 / 6380）；两者都不提供时会因无法插值而报错。
+# =============================================================================
+name: research-agent
+
+services:
+  postgres:
+    container_name: research-postgres
+    # 用 pgvector 镜像（= PostgreSQL 15 + 向量扩展）：本机已缓存该镜像，而 docker.io 官方源不可达、
+    # 镜像源较慢，复用可免去一次拉取；本项目不创建 vector 扩展，行为与官方 postgres:15 一致
+    image: pgvector/pgvector:pg15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_USER:-research}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-researchpass}
+      POSTGRES_DB: ${PG_DATABASE:-research}
+    ports:
+      # 宿主端口 = PG_PORT（本机 5433，避开项目一的 5432）；容器内仍是 5432
+      - "${PG_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-research} -d ${PG_DATABASE:-research}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [research-net]
+
+  redis:
+    container_name: research-redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      # 宿主端口 = REDIS_PORT（本机 6380，避开项目一的 6379）；容器内仍是 6379
+      - "${REDIS_PORT}:6379"
+    # AOF 持久化 + noeviction：Redis 同时承担 Celery broker，若内存淘汰或重启丢队列会直接丢任务
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [research-net]
+
+networks:
+  research-net:
+    driver: bridge
+
+volumes:
+  pgdata:
+  redisdata:

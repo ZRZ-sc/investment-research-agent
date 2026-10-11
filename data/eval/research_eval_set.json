@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "name": "项目二 自动化投研系统 · N1 评测集",
+    "version": "1.0",
+    "created_for": "需求文档 N1（任务成功率 >95%）/ N2（单任务 <8 分钟）与降级策略验证",
+    "categories": {
+      "us_listed": "正常美股公司（10）——走完整三步：信息搜集 + SEC 财报 + Pro 报告",
+      "chinese_name": "中文名公司（5）——不给 ticker，验证本地映射表/LLM 兜底的名称解析",
+      "no_data": "无数据公司（5）——验证三级降级链与「数据来源受限」标记，不应崩溃",
+      "edge_case": "边界情况（5）——特殊字符、数字开头、撇号、超长名称"
+    },
+    "notes": [
+      "company_name 长度上限 100（API 校验），超长样本控制在 95 字符左右",
+      "expect=degraded 表示「预期降级但任务仍应 completed」，用于区分优雅降级与真实失败",
+      "提交受应用层限流：每个 token 每分钟最多 1 个新任务"
+    ]
+  },
+  "cases": [
+    {"id": "us-01", "category": "us_listed", "company_name": "Apple Inc.", "ticker": "AAPL", "expect": "success", "note": "本地映射表命中 + SEC 有年报"},
+    {"id": "us-02", "category": "us_listed", "company_name": "Microsoft Corporation", "ticker": "MSFT", "expect": "success", "note": "三大报表完整"},
+    {"id": "us-03", "category": "us_listed", "company_name": "Tesla, Inc.", "ticker": "TSLA", "expect": "success", "note": "重资产制造，负债结构复杂"},
+    {"id": "us-04", "category": "us_listed", "company_name": "NVIDIA Corporation", "ticker": "NVDA", "expect": "success", "note": "高增长样本"},
+    {"id": "us-05", "category": "us_listed", "company_name": "Amazon.com, Inc.", "ticker": "AMZN", "expect": "success", "note": "低净利率样本"},
+    {"id": "us-06", "category": "us_listed", "company_name": "Alphabet Inc.", "ticker": "GOOGL", "expect": "success", "note": "多类别股（GOOGL/GOOG）"},
+    {"id": "us-07", "category": "us_listed", "company_name": "Meta Platforms, Inc.", "ticker": "META", "expect": "success", "note": "名称含逗号"},
+    {"id": "us-08", "category": "us_listed", "company_name": "Netflix, Inc.", "ticker": "NFLX", "expect": "success", "note": "内容成本重"},
+    {"id": "us-09", "category": "us_listed", "company_name": "JPMorgan Chase & Co.", "ticker": "JPM", "expect": "success", "note": "金融业，报表科目与其他行业差异大"},
+    {"id": "us-10", "category": "us_listed", "company_name": "The Coca-Cola Company", "ticker": "KO", "expect": "success", "note": "名称带 The"},
+
+    {"id": "cn-01", "category": "chinese_name", "company_name": "苹果", "ticker": null, "expect": "success", "note": "中文别名 → AAPL"},
+    {"id": "cn-02", "category": "chinese_name", "company_name": "微软", "ticker": null, "expect": "success", "note": "中文别名 → MSFT"},
+    {"id": "cn-03", "category": "chinese_name", "company_name": "腾讯", "ticker": null, "expect": "success", "note": "中文别名 → TCEHY（ADR）"},
+    {"id": "cn-04", "category": "chinese_name", "company_name": "阿里巴巴", "ticker": null, "expect": "success", "note": "中文别名 → BABA"},
+    {"id": "cn-05", "category": "chinese_name", "company_name": "特斯拉", "ticker": null, "expect": "success", "note": "中文别名 → TSLA"},
+
+    {"id": "nd-01", "category": "no_data", "company_name": "ZZZZ Corp", "ticker": "ZZZZ", "expect": "degraded", "note": "不存在；新浪会返回占位行情（已加校验拦截）"},
+    {"id": "nd-02", "category": "no_data", "company_name": "Foobar Inc.", "ticker": "FOOBAR", "expect": "degraded", "note": "不存在；行情接口返回空"},
+    {"id": "nd-03", "category": "no_data", "company_name": "Nonexistent Holdings Limited", "ticker": "NONEXX", "expect": "degraded", "note": "不存在，长名称+后缀"},
+    {"id": "nd-04", "category": "no_data", "company_name": "不存在的公司XYZ", "ticker": "XYZNONE", "expect": "degraded", "note": "中文乱造名"},
+    {"id": "nd-05", "category": "no_data", "company_name": "Qwertyuiop Industries", "ticker": "QWERTY", "expect": "degraded", "note": "键盘乱敲名"},
+
+    {"id": "eg-01", "category": "edge_case", "company_name": "AT&T Inc.", "ticker": null, "expect": "success", "note": "含 & 符号，且不在本地映射表 → 需 LLM 兜底解析 ticker"},
+    {"id": "eg-02", "category": "edge_case", "company_name": "Johnson & Johnson", "ticker": null, "expect": "success", "note": "含 &，本地映射表命中 JNJ"},
+    {"id": "eg-03", "category": "edge_case", "company_name": "O'Reilly Automotive, Inc.", "ticker": null, "expect": "success", "note": "含撇号"},
+    {"id": "eg-04", "category": "edge_case", "company_name": "3M Company", "ticker": null, "expect": "success", "note": "数字开头"},
+    {"id": "eg-05", "category": "edge_case", "company_name": "Apple Inc. (formerly Apple Computer, Inc.) - Cupertino, California, USA", "ticker": "AAPL", "expect": "success", "note": "超长名称（71 字符，API 上限 100）"}
+  ]
+}

@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual env
+.venv/
+venv/
+
+# Env & secrets
+.env
+*.local
+
+# Model caches (local torch models are large)
+# 注意：必须锚定到仓库根目录。写成不带前导斜杠的 `models/` 会连带忽略 app/models/
+# （Pydantic 模型包），导致克隆出来的仓库缺少该包、服务直接起不来。
+/models/
+~/.cache/huggingface/
+
+# Data / volumes
+/data/volumes/
+/volumes/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Load test artifacts (Locust CSV/HTML)
+loadtest/results/
+
+# 评测与演示产物
+# 注意：.gitignore 不支持行内注释（`路径  # 说明` 会被当成字面模式而失效），说明一律单独成行
+# - /data/reports/：报告全文（体积大、可由任务重跑再生，不入库）
+/data/reports/
+# 以下内容**要入库**（面试/评审可直接看到真实产物）：
+#   data/eval/research_eval_set.json      25 条四类评测集
+#   data/eval/research_eval_results.json  25 条逐条结果（含耗时/降级/数据源）
+#   docs/screenshots/*.png                界面实测截图（README「界面预览」引用）
